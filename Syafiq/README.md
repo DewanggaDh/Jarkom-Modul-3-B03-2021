@@ -500,3 +500,13 @@ wget --proxy-user=zorobelikapalb03 --proxy-password=zoro_b03 super.franky.b03.co
 ![image](https://user-images.githubusercontent.com/16128257/140804812-f84496ed-0e13-4a58-9763-7c3f64382d78.png)
 
 ![image](https://user-images.githubusercontent.com/16128257/140804848-0d04370e-7132-4684-9495-c7d53fa07ae9.png)
+
+## References
+
+- https://askubuntu.com/questions/857659/extend-simple-dhcp-address-range-to-include-more-addresses
+- https://support.cumulusnetworks.com/hc/en-us/articles/201787526-Configuring-DHCP-Relays
+- http://yourtoolbox.blogspot.com/2013/01/dhcp-forwarding-with-relay-server.html
+- https://stackoverflow.com/questions/11815121/how-can-i-use-md5-passwords-in-htpasswd-file
+- https://henri.web.id/redirect-url-menggunakan-squid-proxy-server/
+- https://kifarunix.com/how-to-setup-squid-proxy-basic-authentication-with-username-and-password/
+- https://serverfault.com/questions/844527/multiple-http-access-logic-at-the-same-time-for-squid-proxy
