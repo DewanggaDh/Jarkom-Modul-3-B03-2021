@@ -173,7 +173,7 @@ acl AVAILABLE_WORKING_2 time TWHF 17:00-24:00
 acl AVAILABLE_WORKING_3 time WHFA 00:00-03:00
 ```
 
-2. Buka konfigurasi squid proxy lalu modifikasi menjadi berikut ini.
+2. Buka konfigurasi squid proxy `/etc/squid/squid.conf` lalu modifikasi menjadi berikut ini.
 
 ```
 include /etc/squid/acl.conf
@@ -363,6 +363,70 @@ lynx google.com
 Saatnya berlayar! Luffy dan Zoro akhirnya memutuskan untuk berlayar untuk mencari harta karun di super.franky.yyy.com. Tugas pencarian dibagi menjadi dua misi, Luffy bertugas untuk mendapatkan gambar (.png, .jpg), sedangkan Zoro mendapatkan sisanya. Karena Luffy orangnya sangat teliti untuk mencari harta karun, ketika ia berhasil mendapatkan gambar, ia mendapatkan gambar dan melihatnya dengan kecepatan 10 kbps.
 
 ### Penyelesaian
+
+1. Buka konfigurasi squid proxy `/etc/squid/squid.conf` lalu modifikasi menjadi berikut ini.
+
+```
+include /etc/squid/acl.conf
+http_port 5000
+
+http_access deny !AVAILABLE_WORKING_1 !AVAILABLE_WORKING_2 !AVAILABLE_WORKING$
+
+acl BLACKLISTS dstdomain "/etc/squid/restrict-sites.acl"
+http_access deny BLACKLISTS
+deny_info http://super.franky.b03.com BLACKLISTS
+
+auth_param basic program /usr/lib/squid/basic_ncsa_auth /etc/squid/passwd
+auth_param basic children 5
+auth_param basic realm Proxy Authentication Required
+auth_param basic credentialsttl 2 hours
+auth_param basic casesensitive on
+acl USERS proxy_auth REQUIRED
+
+# UNTUK USER LUFFY
+acl USER_LUFFY proxy_auth luffybelikapalb03
+acl IMAGE_PNG_REGEX urlpath_regex \.png$
+acl IMAGE_JPG_REGEX urlpath_regex \.jpg$
+
+delay_pools 1
+delay_class 1 1
+delay_parameters 1 8000/8000
+delay_access 1 allow USER_LUFFY
+
+http_access allow USER_LUFFY IMAGE_PNG_REGEX
+http_access allow USER_LUFFY IMAGE_JPG_REGEX
+http_access deny USERS USER_LUFFY
+
+visible_hostname jualbelikapal.b03.com
+```
+
+2. Kemudian restart squid proxy pada Water7.
+
+```
+service squid restart
+```
+
+3. Gunakan wget untuk test download menggunakan user luffy dengan command berikut.
+
+```
+wget --proxy-user=luffybelikapalb03 --proxy-password=luffy_b03 super.franky.b03.com/public/images/franky.png
+
+wget --proxy-user=luffybelikapalb03 --proxy-password=luffy_b03 super.franky.b03.com/public/images/car.jpg
+
+wget --proxy-user=luffybelikapalb03 --proxy-password=luffy_b03 super.franky.b03.com/public/images/frankysupersecretfood.cursed
+```
+
+4. Untuk setiap command diatas, jika file yang di-download merupakan file `.png` atau `.jpg` maka proses download akan di-limit 10 kbps seperti berikut.
+
+![image](https://user-images.githubusercontent.com/16128257/140803225-97cfb8ab-79bf-4c1f-840e-cd70650dabfd.png)
+
+![image](https://user-images.githubusercontent.com/16128257/140803320-4149caaa-1a9c-494b-9ad4-0a0de7a5f3cf.png)
+
+5. Jika file yang di-download bukan merupakan `.png` ataupun `.jpg` maka proses download akan ditolak.
+
+![image](https://user-images.githubusercontent.com/16128257/140803414-9fe44376-d8eb-4921-9257-781618aff6e1.png)
+
+
 
 ## Nomor 13
 
