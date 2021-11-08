@@ -106,6 +106,59 @@ Agar transaksi jual beli lebih aman dan pengguna website ada dua orang, proxy di
 
 ### Penyelesaian
 
+1. Pada Water7 install `apache2-utils` dengan command berikut.
+
+```
+apt-get update
+apt-get install apache2-utils -y
+```
+
+2. `apache2-utils` di-install agar bisa menggunakan command `htpasswd`.
+
+3. Buat auth proxy dengan menjalankan command berikut.
+
+```
+htpasswd -c -m -b /etc/squid/passwd luffybelikapalb03 luffy_b03
+htpasswd -m -b /etc/squid/passwd zorobelikapalb03 zoro_b03
+```
+
+4. Pada command diatas flag `-c` digunakan untuk membuat file `htpasswd`, pada command kedua tidak menggunakan flag `-c` karena bersifat overwrite. Flag `m` digunakan untuk menggunakan enkripsi MD5. Flag `-b` digunakan untuk menuliskan inline password karena tanpa flag `-b` password akan dituliskan secara interaktif melalu terminal.
+
+5. Modifikasi file `/etc/squid/squid.conf` menjadi berikut ini.
+
+```
+http_port 5000
+auth_param basic program /usr/lib/squid/basic_ncsa_auth /etc/squid/passwd
+auth_param basic children 5
+auth_param basic realm Proxy Authentication Required
+auth_param basic credentialsttl 2 hours
+auth_param basic casesensitive on
+acl USERS proxy_auth REQUIRED
+http_access allow USERS
+visible_hostname jualbelikapal.b03.com
+```
+
+6. Kemudian restart squid proxy pada Water7.
+
+```
+service squid restart
+```
+
+7. Selanjutnya pindah ke LogueTown. Gunakan alamat proxy lalu kunjungi google.com dengan menggunakan Lynx.
+
+```
+export http_proxy="http://jualbelikapal.b03.com:5000"
+lynx google.com
+```
+
+8. Maka untuk mengunjungi google.com perlu login menggunakan salah satu dari akun yang telah dibuat.
+
+![image](https://user-images.githubusercontent.com/16128257/140790892-e1a8d8c1-2c28-4d2b-9723-c1f9960881df.png)
+
+![image](https://user-images.githubusercontent.com/16128257/140790977-a048fc0f-1118-4754-af63-eba455d48056.png)
+
+![image](https://user-images.githubusercontent.com/16128257/140790810-f95a248b-d495-4a5a-b6f0-d387fcd0c628.png)
+
 ## Nomor 10
 
 Transaksi jual beli tidak dilakukan setiap hari, oleh karena itu akses internet dibatasi hanya dapat diakses setiap hari Senin-Kamis pukul 07.00-11.00 dan setiap hari Selasa-Jum’at pukul 17.00-03.00 keesokan harinya (sampai Sabtu pukul 03.00).
