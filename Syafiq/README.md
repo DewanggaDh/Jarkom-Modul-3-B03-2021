@@ -226,6 +226,138 @@ Agar transaksi bisa lebih fokus berjalan, maka dilakukan redirect website agar m
 
 ### Penyelesaian
 
+1. Membuat konfigurasi DNS pada EnniesLobby dengan cara membuat baru pada `/etc/bind/kaizoku/franky.b03.com`. Pada file tersebut isi konfigurasi berikut.
+
+```
+;
+; BIND data file for local loopback interface
+;
+$TTL    604800
+@       IN      SOA     franky.b03.com. root.franky.b03.com. (
+                              2         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+;
+@       IN      NS      franky.b03.com.
+@       IN      A       192.178.3.69
+www     IN      CNAME   franky.b03.com.
+super   IN      A       192.178.3.69
+www.super       IN      CNAME super.franky.b03.com.
+@       IN      AAAA    ::1
+```
+
+2. Kemudian modifikasi file `/etc/bind/named.conf.local` dengan menambahkan konfigurasi berikut.
+
+```
+zone "franky.b03.com" {
+        type master;
+        file "/etc/bind/kaizoku/franky.b03.com";
+};
+```
+
+3. Setelah itu restart bind9 pada EnniesLobby.
+
+```
+service bind9 restart
+```
+
+4. Kemudian install web server pada Skypie dengan menjalankan command berikut.
+
+```
+echo "nameserver 192.168.122.1" > /etc/resolv.conf
+
+apt-get update
+apt-get install unzip -y
+apt-get install wget -y
+apt-get install apache2 -y
+apt-get install php -y
+apt-get install libapache2-mod-php7.0 -y
+
+```
+
+5. Download data zip webserver dari repository lalu unzip datanya dengan command berikut.
+
+```
+cd /var/www
+wget https://raw.githubusercontent.com/FeinardSlim/Praktikum-Modul-2-Jarkom/main/super.franky.zip
+
+unzip super.franky.zip
+mv super.franky super.franky.b03.com
+```
+
+6. Buat file module baru pada `/etc/apache2/sites-available/super.franky.b03.com.conf` kemudian tambahkan / ubah menjadi konfigurasi berikut.
+
+```
+ServerName super.franky.b03.com
+ServerAlias www.super.franky.b03.com
+
+ServerAdmin webmaster@localhost
+DocumentRoot /var/www/super.franky.b03.com
+```
+
+7. Aktifkan module `super.franky.b03.com` dan restart apache2 dengan command berikut.
+
+```
+a2ensite super.franky.b03.com
+service apache2 restart
+```
+
+8. Pada Water 7, buat file baru pada `/etc/squid/restrict-sites.acl` lalu modifikasi isinya sebagai berikut.
+
+```
+google.com
+```
+
+9. Pada Water7, buka konfigurasi squid proxy `/etc/squid/squid.conf` lalu modifikasi menjadi berikut ini.
+
+```
+include /etc/squid/acl.conf
+http_port 5000
+
+http_access deny !AVAILABLE_WORKING_1 !AVAILABLE_WORKING_2 !AVAILABLE_WORKING_3
+
+acl BLACKLISTS dstdomain "/etc/squid/restrict-sites.acl"
+http_access deny BLACKLISTS
+deny_info http://super.franky.b03.com BLACKLISTS
+
+auth_param basic program /usr/lib/squid/basic_ncsa_auth /etc/squid/passwd
+auth_param basic children 5
+auth_param basic realm Proxy Authentication Required
+auth_param basic credentialsttl 2 hours
+auth_param basic casesensitive on
+acl USERS proxy_auth REQUIRED
+http_access allow USERS
+
+visible_hostname jualbelikapal.b03.com
+```
+
+10. Kemudian restart squid proxy pada Water7.
+
+```
+service squid restart
+```
+
+11. Selanjutnya pindah ke Loguetown. Gunakan alamat proxy lalu kunjungi google.com dengan menggunakan Lynx.
+
+```
+export http_proxy="http://jualbelikapal.b03.com:5000"
+lynx google.com
+```
+
+12. Maka untuk mengunjungi google.com perlu login menggunakan salah satu dari akun yang telah dibuat.
+
+13. Jika berhasil maka saat mengunjungi google.com proxy akan langsung melakukan redirect menuju super.franky.b03.com seperti tampilan Lynx berikut.
+
+![image](https://user-images.githubusercontent.com/16128257/140800570-6b328dc3-2264-4d1c-81f2-bea73925edf8.png)
+
+![image](https://user-images.githubusercontent.com/16128257/140790892-e1a8d8c1-2c28-4d2b-9723-c1f9960881df.png)
+
+![image](https://user-images.githubusercontent.com/16128257/140790977-a048fc0f-1118-4754-af63-eba455d48056.png)
+
+![image](https://user-images.githubusercontent.com/16128257/140800653-8d905ecc-3fec-4250-8f2f-313fa0537c94.png)
+
 ## Nomor 12
 
 Saatnya berlayar! Luffy dan Zoro akhirnya memutuskan untuk berlayar untuk mencari harta karun di super.franky.yyy.com. Tugas pencarian dibagi menjadi dua misi, Luffy bertugas untuk mendapatkan gambar (.png, .jpg), sedangkan Zoro mendapatkan sisanya. Karena Luffy orangnya sangat teliti untuk mencari harta karun, ketika ia berhasil mendapatkan gambar, ia mendapatkan gambar dan melihatnya dengan kecepatan 10 kbps.
