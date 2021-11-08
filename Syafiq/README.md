@@ -426,10 +426,77 @@ wget --proxy-user=luffybelikapalb03 --proxy-password=luffy_b03 super.franky.b03.
 
 ![image](https://user-images.githubusercontent.com/16128257/140803414-9fe44376-d8eb-4921-9257-781618aff6e1.png)
 
-
-
 ## Nomor 13
 
 Sedangkan, Zoro yang sangat bersemangat untuk mencari harta karun, sehingga kecepatan kapal Zoro tidak dibatasi ketika sudah mendapatkan harta yang diinginkannya.
 
 ### Penyelesaian
+
+1. Buka konfigurasi squid proxy `/etc/squid/squid.conf` lalu modifikasi menjadi berikut ini.
+
+```
+include /etc/squid/acl.conf
+http_port 5000
+
+http_access deny !AVAILABLE_WORKING_1 !AVAILABLE_WORKING_2 !AVAILABLE_WORKING$
+
+acl BLACKLISTS dstdomain "/etc/squid/restrict-sites.acl"
+http_access deny BLACKLISTS
+deny_info http://super.franky.b03.com BLACKLISTS
+
+auth_param basic program /usr/lib/squid/basic_ncsa_auth /etc/squid/passwd
+auth_param basic children 5
+auth_param basic realm Proxy Authentication Required
+auth_param basic credentialsttl 2 hours
+auth_param basic casesensitive on
+acl USERS proxy_auth REQUIRED
+
+# UNTUK USER LUFFY
+acl USER_LUFFY proxy_auth luffybelikapalb03
+acl IMAGE_PNG_REGEX urlpath_regex \.png$
+acl IMAGE_JPG_REGEX urlpath_regex \.jpg$
+
+delay_pools 1
+delay_class 1 1
+delay_parameters 1 8000/8000
+delay_access 1 allow USER_LUFFY
+
+http_access allow USER_LUFFY IMAGE_PNG_REGEX
+http_access allow USER_LUFFY IMAGE_JPG_REGEX
+http_access deny USERS USER_LUFFY
+
+# UNTUK USER ZORO
+acl USER_ZORO proxy_auth zorobelikapalb03
+
+http_access deny USER_ZORO IMAGE_PNG_REGEX
+http_access deny USER_ZORO IMAGE_JPG_REGEX
+http_access allow USERS USER_ZORO
+
+visible_hostname jualbelikapal.b03.com
+```
+
+2. Kemudian restart squid proxy pada Water7.
+
+```
+service squid restart
+```
+
+3. Gunakan wget untuk test download menggunakan user zoro dengan command berikut.
+
+```
+wget --proxy-user=zorobelikapalb03 --proxy-password=zoro_b03 super.franky.b03.com/public/images/franky.png
+
+wget --proxy-user=zorobelikapalb03 --proxy-password=zoro_b03 super.franky.b03.com/public/images/car.jpg
+
+wget --proxy-user=zorobelikapalb03 --proxy-password=zoro_b03 super.franky.b03.com/public/images/frankysupersecretfood.cursed
+```
+
+4. Untuk setiap command diatas, jika file yang di-download bukan merupakan file `.png` atau `.jpg` maka proses download akan berhasil tanpa ada limit kecepatan seperti berikut.
+
+![image](https://user-images.githubusercontent.com/16128257/140804708-09da8237-10ec-4e4d-9576-0e0526a4ccba.png)
+
+5. Jika file yang di-download merupakan `.png` ataupun `.jpg` maka proses download akan ditolak.
+
+![image](https://user-images.githubusercontent.com/16128257/140804812-f84496ed-0e13-4a58-9763-7c3f64382d78.png)
+
+![image](https://user-images.githubusercontent.com/16128257/140804848-0d04370e-7132-4684-9495-c7d53fa07ae9.png)
