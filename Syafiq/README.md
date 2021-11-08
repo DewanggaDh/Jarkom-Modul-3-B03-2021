@@ -144,7 +144,7 @@ visible_hostname jualbelikapal.b03.com
 service squid restart
 ```
 
-7. Selanjutnya pindah ke LogueTown. Gunakan alamat proxy lalu kunjungi google.com dengan menggunakan Lynx.
+7. Selanjutnya pindah ke Loguetown. Gunakan alamat proxy lalu kunjungi google.com dengan menggunakan Lynx.
 
 ```
 export http_proxy="http://jualbelikapal.b03.com:5000"
@@ -164,6 +164,61 @@ lynx google.com
 Transaksi jual beli tidak dilakukan setiap hari, oleh karena itu akses internet dibatasi hanya dapat diakses setiap hari Senin-Kamis pukul 07.00-11.00 dan setiap hari Selasa-Jum’at pukul 17.00-03.00 keesokan harinya (sampai Sabtu pukul 03.00).
 
 ### Penyelesaian
+
+1. Buat file baru pada `/etc/squid/acl.conf` lalu modifikasi isinya sebagai berikut ini.
+
+```
+acl AVAILABLE_WORKING_1 time MTWH 07:00-11:00
+acl AVAILABLE_WORKING_2 time TWHF 17:00-24:00
+acl AVAILABLE_WORKING_3 time WHFA 00:00-03:00
+```
+
+2. Buka konfigurasi squid proxy lalu modifikasi menjadi berikut ini.
+
+```
+include /etc/squid/acl.conf
+
+http_port 5000
+
+http_access deny !AVAILABLE_WORKING_1 !AVAILABLE_WORKING_2 !AVAILABLE_WORKING_3
+
+auth_param basic program /usr/lib/squid/basic_ncsa_auth /etc/squid/passwd
+auth_param basic children 5
+auth_param basic realm Proxy Authentication Required
+auth_param basic credentialsttl 2 hours
+auth_param basic casesensitive on
+acl USERS proxy_auth REQUIRED
+http_access allow USERS
+
+visible_hostname jualbelikapal.b03.com
+```
+
+3. Kemudian restart squid proxy pada Water7.
+
+```
+service squid restart
+```
+
+4. Selanjutnya pindah ke Loguetown. Gunakan alamat proxy lalu kunjungi google.com dengan menggunakan Lynx.
+
+```
+export http_proxy="http://jualbelikapal.b03.com:5000"
+lynx google.com
+```
+
+5. Maka untuk mengunjungi google.com perlu login menggunakan salah satu dari akun yang telah dibuat.
+
+6. Berikut adalah tampilan pada Lynx jika akses internet tidak pada waktu yang ditentukan.
+
+![image](https://user-images.githubusercontent.com/16128257/140797485-2c05bb88-cd3c-458a-aadf-a3598fffc776.png)
+
+7. Berikut adalah tampilan pada Lynx jika akses internet pada waktu yang ditentukan.
+
+![image](https://user-images.githubusercontent.com/16128257/140790892-e1a8d8c1-2c28-4d2b-9723-c1f9960881df.png)
+
+![image](https://user-images.githubusercontent.com/16128257/140790977-a048fc0f-1118-4754-af63-eba455d48056.png)
+
+![image](https://user-images.githubusercontent.com/16128257/140790810-f95a248b-d495-4a5a-b6f0-d387fcd0c628.png)
 
 ## Nomor 11
 
