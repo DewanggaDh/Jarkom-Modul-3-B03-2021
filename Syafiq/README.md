@@ -11,6 +11,7 @@ Pada Loguetown, proxy harus bisa diakses dengan nama jualbelikapal.yyy.com denga
 1. Pada Water7 install squid proxy menggunakan command berikut.
 
 ```
+apt-get update
 apt-get install squid -y
 ```
 
@@ -67,22 +68,29 @@ service bind9 restart
 service squid restart
 ```
 
-9. Harusnya Squid proxy pada Water7 bisa berjalan dengan baik. Untuk test kita gunakan Loguetown sebagai client proxy.
+9. Pada file `/etc/resolv.conf` di Water7 modifikasi isinya menjadi berikut. Hal ini dilakukan karena untuk mengetahui DNS EnniesLobby maka Water7 perlu menggunakan nameserver dari EnniesLobby yaitu pada IP `192.178.2.2`. IP `192.168.122.1` digunakan untuk akses internet.
 
-10. Pada Loguetown, install Lynx dengan command berikut.
+```
+nameserver 192.178.2.2
+nameserver 192.168.122.1
+```
+
+10. Harusnya Squid proxy pada Water7 bisa berjalan dengan baik. Untuk test kita gunakan Loguetown sebagai client proxy.
+
+11. Pada Loguetown, install Lynx dengan command berikut.
 
 ```
 apt-get update
 apt-get install lynx -y
 ```
 
-11. Kemudian run command berikut untuk memasang web proxy, agar Lynx dapat menggunakan proxy.
+12. Kemudian run command berikut untuk memasang web proxy, agar Lynx dapat menggunakan proxy.
 
 ```
 export http_proxy="http://jualbelikapal.b03.com:5000"
 ```
 
-12. Dengan Lynx coba kunjungi `google.com` atau alamat lainnya.
+13. Dengan Lynx coba kunjungi `google.com` atau alamat lainnya.
 
 ```
 lynx google.com
