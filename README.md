@@ -1,5 +1,9 @@
 # Jarkom-Modul-3-B03-2021
 
+Nama Anggota :
+1. Dewangga Dharmawan (05111940000029)
+2. Ahmad Syafiq Aqil Wafi (05111940000089)
+
 ## Nomor 1
 
 Membuat peta topologi dengan kriteria :
