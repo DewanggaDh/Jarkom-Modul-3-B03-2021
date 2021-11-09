@@ -21,6 +21,7 @@ apt-get install bind9 -y
 
 `
 apt-get update
+
 apt-get install isc-dhcp-server
 `
 
