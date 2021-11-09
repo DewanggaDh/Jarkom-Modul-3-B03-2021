@@ -19,11 +19,10 @@ apt-get install bind9 -y
 
 2.1. Di dalam Jipangu, install isc-dhcp-server :
 
-`
+```
 apt-get update
-
 apt-get install isc-dhcp-server
-`
+```
 
 2.2 Lalu, mengecek versinya
    
@@ -37,16 +36,16 @@ apt-get install isc-dhcp-server
     
 3.1 Di dalam Water7, install squid :
 
-`
+```
 apt-get update
 apt-get install squid
-`
+```
 
 3.2 Cek versi squidnya :
    
-`
+```
 service squid status
-`
+```
     
 ![image](https://user-images.githubusercontent.com/73766205/140767397-78aacdca-d46d-40ce-ab26-553214eb3944.png)
 
@@ -80,9 +79,9 @@ Masih di Jipangu, edit file /etc/dhcp/dhcpd.conf dengan menambahkan kodingan ini
 
 Lalu, restart DHCP Server di Jipangu dengan command :
 
-`
+```
 service isc-dhcp-server restart
-`
+```
 
 ## Nomor 5
 
@@ -92,10 +91,10 @@ Client mendapatkan DNS dari EniesLobby dan client dapat terhubung dengan interne
 
 2. Ubah konfigurasi masing-masing konfigurasi dengan kodingan ini :
 
-`
+```
 auto eth0
 iface eth0 inet dhcp
-`
+```
 
 3. Restart Loguetown dan Alabasta dengan menghentikan masing-masing dari kedua server lalu menjalankannya lagi.
 
@@ -121,9 +120,9 @@ Masih di Jipangu, edit file /etc/dhcp/dhcpd.conf dan ditambahkan kodingan beriku
 
 Lalu, restart DHCP Server di Jipangu dengan command :
 
-`
+```
 service isc-dhcp-server restart
-`
+```
 
 ## Nomor 8
 
