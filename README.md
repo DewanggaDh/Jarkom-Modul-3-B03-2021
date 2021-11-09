@@ -2,34 +2,66 @@
 
 ## Nomor 1
 
-Membuat Topologi dengan kriteria :
-- EniesLobby adalah DNS Server
+Membuat peta topologi dengan kriteria :
+- EniesLobby menjadi DNS Server
+- Jipangu menjadi DHCP Server
+- Water7 menjadi Proxy Server
 
-![image](https://user-images.githubusercontent.com/73766205/140764963-fecd591c-ba72-4b26-bc43-fd492e49aed8.png)
+1. EniesLobby menjadi DNS Server
+Di dalam EniesLobby, setelah dihubungkan dengan internet melewati Foosha, install bind9 dengan command :
+    
+    `
+    apt-get update
+    apt-get install bind9 -y
+    `
 
-- Jipangu adalah DHCP Server
+2. Jipangu menjadi DHCP Server
+   2.1. Di dalam Jipangu, install isc-dhcp-server :
 
-![image](https://user-images.githubusercontent.com/73766205/140765985-f0d76994-af79-4b11-ac0b-d1f4ac3ff1cf.png)
+`
+apt-get update
+apt-get install isc-dhcp-server
+`
+   2.2 Lalu, mengecek versinya
+   ![image](https://user-images.githubusercontent.com/73766205/140765985-f0d76994-af79-4b11-ac0b-d1f4ac3ff1cf.png)
 
-![image](https://user-images.githubusercontent.com/73766205/140766402-4440438e-0daa-4431-973a-805de166d9d6.png)
+   2.3 Edit file /etc/default/isc-dhcp-server dengan menambahkan eth0, kabel menuju switch 2 dan Foosha, di INTERFACES
+   ![image](https://user-images.githubusercontent.com/73766205/140766402-4440438e-0daa-4431-973a-805de166d9d6.png)
+   
+3. Water7 menjadi Proxy Server
+    3.1 Di dalam Water7, install squid :
+
+`
+apt-get update
+apt-get install squid
+`
+
+   3.2 Cek versi squidnya :
+   `
+   service squid status
+   `
+    
+   ![image](https://user-images.githubusercontent.com/73766205/140767397-78aacdca-d46d-40ce-ab26-553214eb3944.png)
+
+## Nomor 2
+
+Menjadikan Foosha sebagai DHCP Relay
+
+1. Di dalam Foosha, install DHCP Relay, lalu jika diminta untuk memasukkan apapun, seperti mendengarkan ke server mana dsb., tekan enter tiga kali
+
+(Photo later)
+2. Edit file /etc/default/isc-dhcp-relay dengan memasukkan tujuan relay DHCP ke alamat IP Jipangu (192.178.2.4) :
+
+![image](https://user-images.githubusercontent.com/73766205/140768604-29452f1c-8940-4339-85d2-06cbb177e63d.png)
+
+## Nomor 3
+
 
 ![image](https://user-images.githubusercontent.com/73766205/140766763-3dc55978-a53c-419b-9f65-c7bca8e2ca91.png)
 
 ![image](https://user-images.githubusercontent.com/73766205/140766884-fc7afbe4-f6e3-4f69-96b0-31f10669c4ad.png)
 
-- Water7 sebagai Proxy Server
 
-![image](https://user-images.githubusercontent.com/73766205/140767397-78aacdca-d46d-40ce-ab26-553214eb3944.png)
-
-![image](https://user-images.githubusercontent.com/73766205/140767989-6d54e3e7-d937-4ac9-9c0a-eadbef189ba1.png)
-
-## Nomor 2
-
-- Foosha sebagai DHCP Relay
-
-![image](https://user-images.githubusercontent.com/73766205/140768604-29452f1c-8940-4339-85d2-06cbb177e63d.png)
-
-## Nomor 3
 ## Nomor 4
 ## Nomor 5
 ## Nomor 6
