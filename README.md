@@ -10,10 +10,10 @@ Membuat peta topologi dengan kriteria :
 1. EniesLobby menjadi DNS Server
 Di dalam EniesLobby, setelah dihubungkan dengan internet melewati Foosha, install bind9 dengan command :
     
-`
+```
 apt-get update
 apt-get install bind9 -y
-`
+```
 
 2. Jipangu menjadi DHCP Server
 
