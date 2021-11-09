@@ -10,42 +10,44 @@ Membuat peta topologi dengan kriteria :
 1. EniesLobby menjadi DNS Server
 Di dalam EniesLobby, setelah dihubungkan dengan internet melewati Foosha, install bind9 dengan command :
     
-    `
-    apt-get update
-    apt-get install bind9 -y
-    `
+`
+apt-get update
+apt-get install bind9 -y
+`
 
 2. Jipangu menjadi DHCP Server
 
-   2.1. Di dalam Jipangu, install isc-dhcp-server :
+2.1. Di dalam Jipangu, install isc-dhcp-server :
 
 `
 apt-get update
 apt-get install isc-dhcp-server
 `
 
-   2.2 Lalu, mengecek versinya
-   ![image](https://user-images.githubusercontent.com/73766205/140765985-f0d76994-af79-4b11-ac0b-d1f4ac3ff1cf.png)
+2.2 Lalu, mengecek versinya
+   
+![image](https://user-images.githubusercontent.com/73766205/140765985-f0d76994-af79-4b11-ac0b-d1f4ac3ff1cf.png)
 
-   2.3 Edit file /etc/default/isc-dhcp-server dengan menambahkan eth0, kabel menuju switch 2 dan Foosha, di INTERFACES
-   ![image](https://user-images.githubusercontent.com/73766205/140766402-4440438e-0daa-4431-973a-805de166d9d6.png)
+2.3 Edit file /etc/default/isc-dhcp-server dengan menambahkan eth0, kabel menuju switch 2 dan Foosha, di INTERFACES
+   
+![image](https://user-images.githubusercontent.com/73766205/140766402-4440438e-0daa-4431-973a-805de166d9d6.png)
    
 3. Water7 menjadi Proxy Server
     
-    3.1 Di dalam Water7, install squid :
+3.1 Di dalam Water7, install squid :
 
 `
 apt-get update
 apt-get install squid
 `
 
-   3.2 Cek versi squidnya :
+3.2 Cek versi squidnya :
    
-   `
-   service squid status
-   `
+`
+service squid status
+`
     
-   ![image](https://user-images.githubusercontent.com/73766205/140767397-78aacdca-d46d-40ce-ab26-553214eb3944.png)
+![image](https://user-images.githubusercontent.com/73766205/140767397-78aacdca-d46d-40ce-ab26-553214eb3944.png)
 
 ## Nomor 2
 
