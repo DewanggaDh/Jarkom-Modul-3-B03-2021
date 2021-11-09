@@ -7,6 +7,8 @@ Membuat peta topologi dengan kriteria :
 - Jipangu menjadi DHCP Server
 - Water7 menjadi Proxy Server
 
+![image](https://user-images.githubusercontent.com/73766205/140901778-d0400777-b891-488c-b9f8-8f84b9286936.png)
+
 1. EniesLobby menjadi DNS Server
 Di dalam EniesLobby, setelah dihubungkan dengan internet melewati Foosha, install bind9 dengan command :
     
@@ -55,7 +57,7 @@ Menjadikan Foosha sebagai DHCP Relay
 
 1. Di dalam Foosha, install DHCP Relay, lalu jika diminta untuk memasukkan apapun, seperti mendengarkan ke server mana dsb., tekan enter tiga kali
 
-(Photo later)
+![image](https://user-images.githubusercontent.com/73766205/140902330-692e7467-bee6-4f14-b32f-52978e64c5a7.png)
 
 2. Edit file /etc/default/isc-dhcp-relay dengan memasukkan tujuan relay DHCP ke alamat IP Jipangu (192.178.2.4) :
 
@@ -67,7 +69,7 @@ Client yang melewati switch 1, Loguetown dan Alabasta, memiliki range IP 192.178
 
 Di dalam Jipangu, edit file /etc/dhcp/dhcpd.conf dengan menambahkan kodingan ini :
 
-![image](https://user-images.githubusercontent.com/73766205/140859047-3f5c9a3c-a908-4dad-8a6c-0c9668484931.png)
+![image](https://user-images.githubusercontent.com/73766205/140903186-6be51a08-eb53-46cf-b42b-51e12c56d63d.png)
 
 ## Nomor 4
 
@@ -75,7 +77,11 @@ Client yang melewati switch 3, Skypie dan TottoLand, memiliki range IP 192.178.3
 
 Masih di Jipangu, edit file /etc/dhcp/dhcpd.conf dengan menambahkan kodingan ini :
 
-![image](https://user-images.githubusercontent.com/73766205/140766884-fc7afbe4-f6e3-4f69-96b0-31f10669c4ad.png)
+![image](https://user-images.githubusercontent.com/73766205/140903621-812c0156-1e68-4d92-996a-800dd3bc0a17.png)
+
+Setelah switch 1 dan 3 memiliki subnet, ditambahkan subnet untuk switch 2 dengan IP 192.178.2.100 - 192.178.2.150 tanpa alamat broadcast dan waktu lease
+
+![image](https://user-images.githubusercontent.com/73766205/140903931-fb8f0203-2cef-4e9f-be87-613114ff986d.png)
 
 Lalu, restart DHCP Server di Jipangu dengan command :
 
@@ -87,18 +93,28 @@ service isc-dhcp-server restart
 
 Client mendapatkan DNS dari EniesLobby dan client dapat terhubung dengan internet melalui DNS tersebut.
 
-1. Edit /etc/network/interface di Loguetown dan Alabasta
-
-2. Ubah konfigurasi masing-masing konfigurasi dengan kodingan ini :
+1. Edit konfigurasi di Loguetown dan Alabasta sehingga hanya ada kodingan seperti ini :
 
 ```
 auto eth0
 iface eth0 inet dhcp
 ```
 
-3. Restart Loguetown dan Alabasta dengan menghentikan masing-masing dari kedua server lalu menjalankannya lagi.
+2. Restart Loguetown dan Alabasta dengan menghentikan masing-masing dari kedua server lalu menjalankannya lagi.
 
-4. Cek IP-IP-nya menggunakan `ip a`
+3. Cek IP-IP-nya menggunakan `ip a`
+
+Loguetown :
+
+![image](https://user-images.githubusercontent.com/73766205/140905925-40faa6ca-d8c3-46cd-9bae-e90210836272.png)
+
+![image](https://user-images.githubusercontent.com/73766205/140906408-6a573995-e9c6-4ad7-8424-b6c77b98b457.png)
+
+Alabasta :
+
+![image](https://user-images.githubusercontent.com/73766205/140906148-098db451-c3dd-44dd-86d9-d376c76b0c95.png)
+
+![image](https://user-images.githubusercontent.com/73766205/140906330-387d6088-5b66-461d-a327-0c3208aa0690.png)
 
 ## Nomor 6
 
@@ -106,7 +122,7 @@ Lama waktu DHCP server meminjamkan alamat IP kepada Client yang melalui Switch1 
 
 Di Jipangu, edit file /etc/dhcp/dhcpd.conf sehingga waktu masing-masing switch sesuai yang tertera
 
-![image](https://user-images.githubusercontent.com/73766205/140859047-3f5c9a3c-a908-4dad-8a6c-0c9668484931.png)
+![image](https://user-images.githubusercontent.com/73766205/140903432-f82dc8e7-81b2-4e66-8a6b-6f2b077fdc37.png)
 
 ![image](https://user-images.githubusercontent.com/73766205/140766884-fc7afbe4-f6e3-4f69-96b0-31f10669c4ad.png)
 
@@ -114,11 +130,15 @@ Di Jipangu, edit file /etc/dhcp/dhcpd.conf sehingga waktu masing-masing switch s
 
 Skypie dijadikan server dengan alamat IP tetap 192.178.3.69
 
-Masih di Jipangu, edit file /etc/dhcp/dhcpd.conf dan ditambahkan kodingan berikut :
+1. Di Skypie7, command `ip a` untuk mencari hardware address
+
+![image](https://user-images.githubusercontent.com/73766205/140906964-86c117ce-30cc-4dd7-b922-0005a2f19fde.png)
+
+2. Lalu di Jipangu, edit file /etc/dhcp/dhcpd.conf dan ditambahkan kodingan berikut, sesuai dengan hardware address di Skypie7 dan IP 192.178.3.69 :
 
 ![image](https://user-images.githubusercontent.com/73766205/140767029-930b8281-42b2-434c-b70d-c3ff7836c1c8.png)
 
-Lalu, restart DHCP Server di Jipangu dengan command :
+3. Lalu, restart DHCP Server di Jipangu dengan command :
 
 ```
 service isc-dhcp-server restart
