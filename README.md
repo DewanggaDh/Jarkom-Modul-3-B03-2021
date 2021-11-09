@@ -56,18 +56,64 @@ Menjadikan Foosha sebagai DHCP Relay
 
 ## Nomor 3
 
+Client yang melewati switch 1, Loguetown dan Alabasta, memiliki range IP 192.178.1.20 - 192.178.1.99 dan IP 192.178.1.150 - 192.178.1.169
 
-![image](https://user-images.githubusercontent.com/73766205/140766763-3dc55978-a53c-419b-9f65-c7bca8e2ca91.png)
+Di dalam Jipangu, edit file /etc/dhcp/dhcpd.conf dengan menambahkan kodingan ini :
+
+![image](https://user-images.githubusercontent.com/73766205/140859047-3f5c9a3c-a908-4dad-8a6c-0c9668484931.png)
+
+## Nomor 4
+
+Client yang melewati switch 3, Skypie dan TottoLand, memiliki range IP 192.178.3.30 - 192.178.3.50
+
+Masih di Jipangu, edit file /etc/dhcp/dhcpd.conf dengan menambahkan kodingan ini :
 
 ![image](https://user-images.githubusercontent.com/73766205/140766884-fc7afbe4-f6e3-4f69-96b0-31f10669c4ad.png)
 
+Lalu, restart DHCP Server di Jipangu dengan command :
+`
+service isc-dhcp-server restart
+`
 
-## Nomor 4
 ## Nomor 5
+
+Client mendapatkan DNS dari EniesLobby dan client dapat terhubung dengan internet melalui DNS tersebut.
+
+1. Edit /etc/network/interface di Loguetown dan Alabasta
+
+2. Ubah konfigurasi masing-masing konfigurasi dengan kodingan ini :
+
+`
+auto eth0
+iface eth0 inet dhcp
+`
+
+3. Restart Loguetown dan Alabasta dengan menghentikan masing-masing dari kedua server lalu menjalankannya lagi.
+
+4. Cek IP-IP-nya menggunakan `ip a`
+
 ## Nomor 6
+
+Lama waktu DHCP server meminjamkan alamat IP kepada Client yang melalui Switch1 selama 6 menit sedangkan pada client yang melalui Switch3 selama 12 menit. Dengan waktu maksimal yang dialokasikan untuk peminjaman alamat IP selama 120 menit.
+
+Di Jipangu, edit file /etc/dhcp/dhcpd.conf sehingga waktu masing-masing switch sesuai yang tertera
+
+![image](https://user-images.githubusercontent.com/73766205/140859047-3f5c9a3c-a908-4dad-8a6c-0c9668484931.png)
+
+![image](https://user-images.githubusercontent.com/73766205/140766884-fc7afbe4-f6e3-4f69-96b0-31f10669c4ad.png)
+
 ## Nomor 7
 
+Skypie dijadikan server dengan alamat IP tetap 192.178.3.69
+
+Masih di Jipangu, edit file /etc/dhcp/dhcpd.conf dan ditambahkan kodingan berikut :
+
 ![image](https://user-images.githubusercontent.com/73766205/140767029-930b8281-42b2-434c-b70d-c3ff7836c1c8.png)
+
+Lalu, restart DHCP Server di Jipangu dengan command :
+`
+service isc-dhcp-server restart
+`
 
 ## Nomor 8
 
