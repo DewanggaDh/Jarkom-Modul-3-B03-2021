@@ -16,12 +16,14 @@ Di dalam EniesLobby, setelah dihubungkan dengan internet melewati Foosha, instal
     `
 
 2. Jipangu menjadi DHCP Server
+
    2.1. Di dalam Jipangu, install isc-dhcp-server :
 
 `
 apt-get update
 apt-get install isc-dhcp-server
 `
+
    2.2 Lalu, mengecek versinya
    ![image](https://user-images.githubusercontent.com/73766205/140765985-f0d76994-af79-4b11-ac0b-d1f4ac3ff1cf.png)
 
@@ -29,6 +31,7 @@ apt-get install isc-dhcp-server
    ![image](https://user-images.githubusercontent.com/73766205/140766402-4440438e-0daa-4431-973a-805de166d9d6.png)
    
 3. Water7 menjadi Proxy Server
+    
     3.1 Di dalam Water7, install squid :
 
 `
@@ -37,6 +40,7 @@ apt-get install squid
 `
 
    3.2 Cek versi squidnya :
+   
    `
    service squid status
    `
@@ -50,6 +54,7 @@ Menjadikan Foosha sebagai DHCP Relay
 1. Di dalam Foosha, install DHCP Relay, lalu jika diminta untuk memasukkan apapun, seperti mendengarkan ke server mana dsb., tekan enter tiga kali
 
 (Photo later)
+
 2. Edit file /etc/default/isc-dhcp-relay dengan memasukkan tujuan relay DHCP ke alamat IP Jipangu (192.178.2.4) :
 
 ![image](https://user-images.githubusercontent.com/73766205/140768604-29452f1c-8940-4339-85d2-06cbb177e63d.png)
@@ -71,6 +76,7 @@ Masih di Jipangu, edit file /etc/dhcp/dhcpd.conf dengan menambahkan kodingan ini
 ![image](https://user-images.githubusercontent.com/73766205/140766884-fc7afbe4-f6e3-4f69-96b0-31f10669c4ad.png)
 
 Lalu, restart DHCP Server di Jipangu dengan command :
+
 `
 service isc-dhcp-server restart
 `
@@ -111,6 +117,7 @@ Masih di Jipangu, edit file /etc/dhcp/dhcpd.conf dan ditambahkan kodingan beriku
 ![image](https://user-images.githubusercontent.com/73766205/140767029-930b8281-42b2-434c-b70d-c3ff7836c1c8.png)
 
 Lalu, restart DHCP Server di Jipangu dengan command :
+
 `
 service isc-dhcp-server restart
 `
