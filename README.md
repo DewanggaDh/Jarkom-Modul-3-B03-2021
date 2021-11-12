@@ -270,6 +270,14 @@ htpasswd -m -b /etc/squid/passwd zorobelikapalb03 zoro_b03
 
 4. Pada command diatas flag `-c` digunakan untuk membuat file `htpasswd`, pada command kedua tidak menggunakan flag `-c` karena bersifat overwrite. Flag `m` digunakan untuk menggunakan enkripsi MD5. Flag `-b` digunakan untuk menuliskan inline password karena tanpa flag `-b` password akan dituliskan secara interaktif melalu terminal.
 
+4.a Informasi Tambahan: Pada dokumentasi htpasswd tertulis bahwa untuk menggunakan enkripsi MD5 menggunakan flag `-m`. Meskipun begitu tanpa menggunakan flag `-m` pun enkripsi telah dipasang untuk menggunakan MD5 secara default. Sumber: https://httpd.apache.org/docs/2.4/programs/htpasswd.html
+
+![image](https://user-images.githubusercontent.com/16128257/141463969-ad24c182-c805-4e32-be9e-d9a3f6868116.png)
+
+4.b Informasi Tambahan: Pada artikel yang lain juga dikatakan bahwa enkripsi MD5 pada `htpasswd` menggunakan APR1-MD5 sehingga hasil pada `passwd` menggunakan enkripsi APR1 yang artinya APR1-MD5 merupakan MD5 juga. Sumber: https://8gwifi.org/htpasswd.jsp
+
+![image](https://user-images.githubusercontent.com/16128257/141463547-a38f04c0-c686-4572-a3fe-79a02a41d50f.png)
+
 5. Modifikasi file `/etc/squid/squid.conf` menjadi berikut ini.
 
 ```
